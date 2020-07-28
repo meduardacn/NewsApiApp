@@ -16,7 +16,7 @@ struct NewsFeedView: View {
             VStack(alignment: .leading) {
                 Text("\(article.title)")
                     .font(.headline)
-                Text("\(article.author)")
+                Text("\(article.author ?? "No author")")
                     .font(.subheadline)
             }.onAppear{
                 self.viewModel.loadMoreArticles(currentItem: article)

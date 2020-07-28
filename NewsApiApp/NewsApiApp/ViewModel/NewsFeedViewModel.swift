@@ -77,21 +77,21 @@ class NewsFeedViewModel: ObservableObject, RandomAccessCollection {
     }
     
     func parseArticlesFromData(data: Data) -> [NewsListItem] {
-        let jsonObject = try! JSONSerialization.jsonObject(with: data)
-        let map = jsonObject as! [String: Any]
-        guard map["status"] as? String == "ok" else { return [] }
-        
-        guard let jsonArticles = map["articles"] as? [[String: Any]] else { return [] }
-        
-        var newArticles = [NewsListItem]()
-        
-        for item in jsonArticles {
-            guard let author = item["author"] as? String else { continue }
-            guard let title = item["title"] as? String else { continue }
-            newArticles.append(NewsListItem(author: author, title: title))
-        }
-        return newArticles
-    }
+           var response: NewsApiResponse
+           do {
+               response = try JSONDecoder().decode(NewsApiResponse.self, from: data)
+           } catch {
+               print("Error parsing the JSON: \(error)")
+               return []
+           }
+           
+           if response.status != "ok" {
+               print("Status is not ok: \(response.status)")
+               return []
+           }
+           
+           return response.articles ?? []
+       }
 }
 
 class NewsApiResponse: Codable{

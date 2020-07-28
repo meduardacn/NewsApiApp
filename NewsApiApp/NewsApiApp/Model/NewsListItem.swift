@@ -9,12 +9,16 @@
 import Foundation
 
 class NewsListItem: Identifiable, Codable {
-    var uuid: UUID
-    var author: String
+    var uuid: UUID = UUID()
+    var author: String?
     var title: String
     
+    enum CodingKeys: String, CodingKey {
+        case author = "author"
+        case title = "title"
+    }
+    
     init(author: String, title:String) {
-        self.uuid = UUID()
         self.author = author
         self.title = title
     }
